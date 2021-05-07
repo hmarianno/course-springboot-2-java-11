@@ -1,12 +1,15 @@
 package com.hmarianno.course.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /* mapeamentos do JPA */
 @Entity
@@ -21,6 +24,9 @@ public class Category implements Serializable {
 	private Long ig;
 	private String name;
 	
+	@Transient
+	private Set<Product> products = new HashSet<>();
+		
 	public Category() {}
 	
 	public Category(Long ig, String name) {
@@ -43,6 +49,10 @@ public class Category implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setProducts(Set<Product> products) {
+		this.products = products;
 	}
 
 	@Override
@@ -69,12 +79,5 @@ public class Category implements Serializable {
 			return false;
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "Category [ig=" + ig + ", name=" + name + "]";
-	}
-	
-	
 
 }
