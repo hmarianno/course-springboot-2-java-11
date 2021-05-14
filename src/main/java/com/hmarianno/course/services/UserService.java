@@ -3,6 +3,8 @@ package com.hmarianno.course.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,15 +45,18 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
-		// preparar o objeto monitorado pelo JPA
-		User entity = repository.getOne(id);
-		
-		// atualizar os campos no objeto monitorado através da função de usuário 
-		// criada abaixo
-		updateData(entity, obj);
-		
-		// executar a alteração (save) e retornar repositório
-		return repository.save(entity);
+			// preparar o objeto monitorado pelo JPA
+			User entity = repository.getOne(id);
+			try {
+			// atualizar os campos no objeto monitorado através da função de usuário 
+			// criada abaixo
+			updateData(entity, obj);
+			
+			// executar a alteração (save) e retornar repositório
+			return repository.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
